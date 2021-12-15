@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from poll_app.models import Answer, Poll, Question
+from poll_app.models import Answer, Poll, Question, UserAnswers
 
 
 class AnswerInline(admin.TabularInline):
@@ -37,3 +37,9 @@ class AnswersAdmin(admin.ModelAdmin):
     """Ответы"""
     list_display = ("id", "text")
     list_display_links = ("id", "text")
+
+
+@admin.register(UserAnswers)
+class UserAnswersAdmin(admin.ModelAdmin):
+    list_display = ("user_id", "answer_id")
+    list_display_links = ("user_id", "answer_id")

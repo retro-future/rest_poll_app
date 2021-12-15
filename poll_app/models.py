@@ -33,3 +33,12 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text
+
+
+class UserAnswers(models.Model):
+    user_id = models.IntegerField()
+    answer_id = models.IntegerField()
+
+    def __str__(self):
+        text = f"{self.user_id} --- {self.answer_id}"
+        return text

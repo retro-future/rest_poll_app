@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from poll_app.models import Poll, Question, Answer
+from poll_app.models import Poll, Question, Answer, UserAnswers
 
 
 class PollsListSerializer(serializers.ModelSerializer):
@@ -36,3 +36,10 @@ class PollDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
         fields = ("id", "name", "description", "start_time", "end_time", "questions")
+
+
+class UserAnswersSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserAnswers
+        fields = ("id", "user_id", "answer_id")
