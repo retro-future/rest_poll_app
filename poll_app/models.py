@@ -37,6 +37,8 @@ class Answer(models.Model):
 
 class UserAnswers(models.Model):
     user_id = models.IntegerField()
+    poll_id = models.IntegerField()
+    question_id = models.IntegerField()
     answer_id = models.IntegerField()
 
     def __str__(self):

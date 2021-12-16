@@ -1,10 +1,8 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 
 from poll_app.models import Poll, Question, UserAnswers
 from poll_app.serializers import PollsListSerializer, QuestionSerializer, PollDetailSerializer, UserAnswersSerializer
@@ -41,4 +39,5 @@ class UserAnswersList(APIView):
         serializer = UserAnswersSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-        return JsonResponse(data={"answer": "ok"}, safe=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
