@@ -1,5 +1,9 @@
+import answers as answers
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
+from rest_framework.decorators import permission_classes, api_view
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -24,20 +28,38 @@ class PollDetailView(generics.RetrieveAPIView):
     serializer_class = PollDetailSerializer
 
 
-class UserAnswersList(APIView):
+class UACreateAndView(APIView):
     """
-    list of user answers
+    list and create User Answers
     """
     def get(self, request):
-        print(request.user.id)
-        user_answers = UserAnswers.objects.all()
+        user_answers = UserAnswers.objects.filter(user_id=request.user.id)
         serializer = UserAnswersSerializer(user_answers, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return Response(serializer.data)
 
     def post(self, request):
-        data = {"user_id": request.user.id, "answer_id": request.data.get("user_id")}
-        serializer = UserAnswersSerializer(data=data)
+        serializer = UserAnswersSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserAnswerUpdate(APIView):
+    """
+    delete and update User Answers
+    """
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def patch(self, request, answer_id):
+        answer = get_object_or_404(UserAnswers, pk=answer_id)
+        serializer = UserAnswersSerializer(answer, data=request.data, context={"request": request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, answer_id):
+        answer = get_object_or_404(UserAnswers, pk=answer_id)
+        answer.delete()
+        return Response("UserAnswer is deleted", status=status.HTTP_204_NO_CONTENT)

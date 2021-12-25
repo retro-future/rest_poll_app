@@ -41,5 +41,5 @@ class AnswersAdmin(admin.ModelAdmin):
 
 @admin.register(UserAnswers)
 class UserAnswersAdmin(admin.ModelAdmin):
-    list_display = ("user_id", "answer_id")
-    list_display_links = ("user_id", "answer_id")
+    list_display = ("id", "user_id", "poll_id", "question_id", "answer_id")
+    list_display_links = ("user_id",)

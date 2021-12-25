@@ -37,9 +37,9 @@ class Answer(models.Model):
 
 class UserAnswers(models.Model):
     user_id = models.IntegerField()
-    poll_id = models.IntegerField()
-    question_id = models.IntegerField()
-    answer_id = models.IntegerField()
+    poll = models.ForeignKey(Poll, related_name="poll", on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, related_name="question", on_delete=models.CASCADE)
+    answer = models.ForeignKey(Answer, related_name="answer", on_delete=models.CASCADE)
 
     def __str__(self):
         text = f"{self.user_id} --- {self.answer_id}"
