@@ -11,14 +11,6 @@ class CurrentUserDefault:
         return self.user_id
 
 
-class PollsListSerializer(serializers.ModelSerializer):
-    """Output a list of polls"""
-
-    class Meta:
-        model = Poll
-        fields = "__all__"
-
-
 class AnswerSerializer(serializers.ModelSerializer):
     """Answer Output"""
 
@@ -36,14 +28,25 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ("id", "text", "question_type", "answers")
 
 
-class PollDetailSerializer(serializers.ModelSerializer):
+class PollSerializer(serializers.ModelSerializer):
     """Detailed poll output"""
 
-    questions = QuestionSerializer(many=True)
+    questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Poll
         fields = ("id", "name", "description", "start_time", "end_time", "questions")
+
+    def create(self, validated_data):
+        return Poll.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        if "start_time" in validated_data:
+            raise serializers.ValidationError({"start_time": "You can't change this field."})
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
 
 
 class UserAnswersSerializer(serializers.ModelSerializer):
