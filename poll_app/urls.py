@@ -12,7 +12,14 @@ urlpatterns = [
     path("polls/<int:pk>/", views.PollDetailView.as_view()),
 
     # Questions
-    path("question/<int:pk>/", views.QuestionView.as_view()),
+    path("question/create/", views.QuestionView.as_view(), name="question_create"),
+    path("question/update/<int:question_id>/", views.QuestionView.as_view(), name="question_update"),
+    path("question/delete/<int:question_id>/", views.QuestionView.as_view(), name="question_delete"),
+
+    # Answer
+    path('answer/create/', views.AnswerView.as_view(), name='answer_create'),
+    path('answer/update/<int:answer_id>/', views.AnswerView.as_view(), name='answer_update'),
+    path('answer/delete/<int:answer_id>/', views.AnswerView.as_view(), name='answer_delete'),
 
     # UserAnswer
     path("user_answers/create/", views.UACreateAndListView.as_view(), name="user_answer_create"),

@@ -9,18 +9,37 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from poll_app.models import Poll, Question, UserAnswers
-from poll_app.serializers import QuestionSerializer, PollSerializer, UserAnswersSerializer
-
-
-class QuestionView(generics.RetrieveAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionSerializer
+from poll_app.models import Poll, Question, UserAnswers, Answer
+from poll_app.serializers import QuestionSerializer, PollSerializer, UserAnswersSerializer, AnswerSerializer
 
 
 class PollDetailView(generics.RetrieveAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
+
+
+class QuestionView(APIView):
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def post(self, request):
+        serializer = QuestionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, question_id):
+        question = get_object_or_404(Question, pk=question_id)
+        serializer = QuestionSerializer(question, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, question_id):
+        question = get_object_or_404(Question, pk=question_id)
+        question.delete()
+        return Response("Question deleted", status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["GET"])
@@ -66,11 +85,36 @@ class PollUpdateAndDelete(APIView):
         return Response("Poll deleted.", status=status.HTTP_204_NO_CONTENT)
 
 
+class AnswerView(APIView):
+    """
+    Create Update and Delete Answer
+    """
+    permission_classes = (IsAuthenticated, IsAdminUser)
+
+    def delete(self, request, answer_id):
+        answer = get_object_or_404(Answer, pk=answer_id)
+        answer.delete()
+        return Response("Answer deleted", status=status.HTTP_204_NO_CONTENT)
+
+    def post(self, request):
+        serializer = AnswerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, answer_id):
+        answer = get_object_or_404(Answer, pk=answer_id)
+        serializer = AnswerSerializer(answer, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UACreateAndListView(APIView):
     """
-    list and create User Answers
+    List and Create User Answers
     """
 
     def get(self, request):
@@ -88,7 +132,7 @@ class UACreateAndListView(APIView):
 
 class UserAnswerUpdate(APIView):
     """
-    delete and update User Answers
+    Delete and Update User Answers
     """
     permission_classes = (IsAuthenticated, IsAdminUser)
 
