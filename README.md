@@ -66,6 +66,8 @@ python manage.py runserver
 ```
 * Приложение будет доступно по адресу: http://127.0.0.1:8000/
 
+___
+
 ### Чтобы получить токен пользователя: 
 >* Request method: POST
 >* URL: http://localhost:8000/api-auth/token/login/
@@ -105,6 +107,8 @@ curl --location --request POST 'http://localhost:8000/api/polls/create/' \
 --form 'end_time=%end_time 
 ```
 
+___
+
 ### Обновить опрос:
 * Request method: PATCH
 * URL: http://localhost:8000/api/polls/update/<poll_id>/
@@ -125,6 +129,9 @@ curl --location --request PATCH 'http://localhost:8000/api/polls/update/<poll_id
 --form 'end_time=%end_time 
 ```
 
+___
+
+
 ### Удалить опрос:
 * Request method: DELETE
 * URL: http://localhost:8000/api/polls/delete/<poll_id>/
@@ -138,6 +145,9 @@ curl --location --request DELETE 'http://localhost:8000/api/polls/delete/<poll_i
 --header 'Authorization: Token %userToken'
 ```
 
+___
+
+
 ### Посмотреть все опросы:
 * Request method: GET
 * URL: http://localhost:8000/api/polls/view/
@@ -149,6 +159,8 @@ curl --location --request GET 'http://localhost:8000/api/polls/view/' \
 --header 'Authorization: Token %userToken'
 ```
 
+___
+
 ### Просмотр текущих активных опросов:
 * Request method: GET
 * URL: http://localhost:8000/api/polls/view/active/
@@ -159,6 +171,8 @@ curl --location --request GET 'http://localhost:8000/api/polls/view/' \
 curl --location --request GET 'http://localhost:8000/api/polls/view/active/' \
 --header 'Authorization: Token %userToken'
 ```
+
+___
 
 ### Создаем вопрос:
 * Request method: POST
@@ -177,6 +191,8 @@ curl --location --request POST 'http://localhost:8000/api/question/create/' \
 --form 'text=%question_text' \
 --form 'question_type=%question_type \
 ```
+
+___
 
 ### Обновляем вопрос:
 * Request method: PATCH
@@ -197,6 +213,8 @@ curl --location --request PATCH 'http://localhost:8000/api/question/update/<ques
 --form 'text=%question_text' \
 --form 'question_type=%question_type \
 ```
+
+___
 
 ### Удаляем вопрос:
 * Request method: DELETE
@@ -307,6 +325,8 @@ curl --location --request PATCH 'http://localhost:8000/api/user_answers/update/<
 --form 'answer_text=%answer_text'
 ```
 
+___
+
 ### Удаляем выбор пользователя:
 * Request method: DELETE
 * URL: http://localhost:8000/api/user_answers/delete/<answer_id>/
@@ -320,6 +340,8 @@ curl --location --request DELETE 'http://localhost:8000/api/answer/update/[answe
 --header 'Authorization: Token %userToken'
 ```
 
+___
+
 ### Просматриваем ответы пользователя:
 * Request method: GET
 * URL: http://localhost:8000/api/user_answers/view/
@@ -329,3 +351,6 @@ curl --location --request DELETE 'http://localhost:8000/api/answer/update/[answe
 ```
 curl --location --request GET 'http://localhost:8000/api/user_answers/view/' \
 --header 'Authorization: Token %userToken'
+```
+
+___
