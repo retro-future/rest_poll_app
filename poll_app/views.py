@@ -2,6 +2,7 @@ import answers as answers
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions
 from rest_framework.decorators import permission_classes, api_view
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
@@ -96,6 +97,7 @@ class AnswerView(APIView):
         answer.delete()
         return Response("Answer deleted", status=status.HTTP_204_NO_CONTENT)
 
+    @swagger_auto_schema(request_body=AnswerSerializer)
     def post(self, request):
         serializer = AnswerSerializer(data=request.data)
         if serializer.is_valid():
